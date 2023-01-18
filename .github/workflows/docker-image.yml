@@ -1,0 +1,49 @@
+name: Create and publish docker image
+
+on: workflow_dispatch
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
+
+      - name: Change case of repo name
+        id: repo
+        uses: ASzc/change-string-case-action@v5
+        with:
+          string: ${{ github.repository }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ steps.repo.outputs.lowercase }}:${{ github.ref_name }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            SaM_REPO=${{ env.REGISTRY }}/${{ steps.repo.outputs.lowercase }}
+            ALPINE_VERSION=${{ github.ref_name }}
