@@ -46,4 +46,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             SaM_REPO=${{ env.REGISTRY }}/kristianstad/secure_and_minimal
-            ALPINE_VERSION=${{ github.ref_name }}
