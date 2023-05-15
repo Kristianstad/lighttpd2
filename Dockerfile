@@ -3,7 +3,7 @@
 # =========================================================================
 # ARGs (can be passed to Build/Final) <BEGIN>
 ARG SaM_REPO=${SaM_REPO:-ghcr.io/kristianstad/secure_and_minimal}
-ARG ALPINE_VERSION=${ALPINE_VERSION:-3.17}
+ARG ALPINE_VERSION=${ALPINE_VERSION:-3.18}
 ARG IMAGETYPE="application"
 ARG RUNDEPS="glib libev lua5.1 libbz2 libunwind"
 ARG BUILDDEPS="libunwind-dev libidn-dev gnutls-dev libev-dev lua5.1-dev ragel zlib-dev openssl-dev mailcap glib-dev"
