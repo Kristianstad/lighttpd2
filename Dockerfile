@@ -6,13 +6,12 @@ ARG SaM_REPO=${SaM_REPO:-ghcr.io/kristianstad/secure_and_minimal}
 ARG ALPINE_VERSION=${ALPINE_VERSION:-3.18}
 ARG IMAGETYPE="application"
 ARG RUNDEPS="glib libev lua5.1 libbz2 libunwind"
-ARG BUILDDEPS="libunwind-dev libidn-dev gnutls-dev libev-dev lua5.1-dev ragel zlib-dev openssl-dev mailcap glib-dev"
+ARG BUILDDEPS="meson ninja-build libunwind-dev libidn-dev gnutls-dev libev-dev lua5.1-dev ragel zlib-dev openssl-dev mailcap glib-dev"
 ARG CLONEGITS="https://git.lighttpd.net/lighttpd/lighttpd2.git"
 ARG STARTUPEXECUTABLES="/usr/sbin/lighttpd2"
 ARG BUILDCMDS=\
 "cd lighttpd2 "\
-"&& sed -i 's/set -e/set -ex/' autogen.sh "\
-"&& sed -i 's/autoreconf --force --install/autoreconf --force --install --verbose --warnings=all/' autogen.sh "\
+"&& meson compile "\
 "&& ./autogen.sh "\
 '&& eval "$COMMON_CONFIGURECMD --with-lua --with-openssl --with-kerberos5 --with-zlib --with-bzip2 --includedir=/usr/include/lighttpd2" '\
 '&& eval "$COMMON_MAKECMDS" '\
